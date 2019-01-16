@@ -1,4 +1,6 @@
 import { Builder } from 'selenium-webdriver';
+import chrome from 'selenium-webdriver/chrome';
+import firefox from 'selenium-webdriver/firefox';
 import { writeFileSync } from 'fs';
 
 export default {
@@ -23,7 +25,12 @@ export default {
 
         version = version ? version[1] : undefined; // eslint-disable-line no-undefined
         platform = platform ? platform[1] : undefined; // eslint-disable-line no-undefined
-        const browser = await new Builder().forBrowser(browserNameString[1], version, platform).usingServer(this.seleniumServer).build();
+        const browser = await new Builder()
+            .forBrowser(browserNameString[1], version, platform)
+            .usingServer(this.seleniumServer)
+            .setChromeOptions(new chrome.Options().headless())
+            .setFirefoxOptions(new firefox.Options().headless())
+            .build();
 
         browser.get(pageUrl);
         this.openedBrowsers[id] = browser;
